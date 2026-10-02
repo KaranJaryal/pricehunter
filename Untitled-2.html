@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>₹10,000 CHALLENGE</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+    min-height:100vh;
+    background:#03020a;
+    color:white;
+    font-family:Arial,Helvetica,sans-serif;
+    overflow-x:hidden;
+}
+
+/* animated background */
+body:before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(circle at 20% 20%,#ff00aa22,transparent 30%),
+      radial-gradient(circle at 80% 30%,#00eaff22,transparent 30%),
+      radial-gradient(circle at 50% 90%,#7b00ff22,transparent 35%);
+    z-index:-2;
+}
+
+.grid{
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(#ffffff08 1px,transparent 1px),
+      linear-gradient(90deg,#ffffff08 1px,transparent 1px);
+    background-size:45px 45px;
+    transform:perspective(500px) rotateX(60deg) scale(1.5);
+    transform-origin:center bottom;
+    z-index:-1;
+    animation:gridMove 8s linear infinite;
+}
+
+@keyframes gridMove{
+    to{background-position:0 45px,45px 0}
+}
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 7%;
+    border-bottom:1px solid #ffffff18;
+    background:#00000055;
+    backdrop-filter:blur(10px);
+}
+
+.logo{
+    font-size:25px;
+    font-weight:900;
+    letter-spacing:3px;
+    color:#00f7ff;
+    text-shadow:0 0 20px #00f7ff;
+}
+
+.live{
+    color:#ff2d75;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.live i{
+    display:inline-block;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#ff2d75;
+    box-shadow:0 0 15px #ff2d75;
+    margin-right:6px;
+    animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+    50%{opacity:.3}
+}
+
+main{
+    width:min(1100px,90%);
+    margin:auto;
+}
+
+/* HERO */
+.hero{
+    text-align:center;
+    padding:65px 0 35px;
+}
+
+.badge{
+    display:inline-block;
+    padding:8px 18px;
+    border:1px solid #ff2d75;
+    border-radius:30px;
+    color:#ff4b8b;
+    font-size:12px;
+    letter-spacing:2px;
+    box-shadow:0 0 20px #ff2d7533;
+}
+
+h1{
+    font-size:clamp(45px,8vw,90px);
+    line-height:.9;
+    margin:25px 0;
+    font-weight:1000;
+    text-transform:uppercase;
+}
+
+h1 span{
+    color:#00f7ff;
+    text-shadow:
+      0 0 10px #00f7ff,
+      0 0 40px #00f7ff;
+}
+
+.subtitle{
+    color:#a9a6b5;
+    max-width:650px;
+    margin:auto;
+    line-height:1.6;
+}
+
+/* JACKPOT */
+.jackpot{
+    margin:40px auto;
+    width:min(650px,100%);
+    padding:30px;
+    border:1px solid #00f7ff55;
+    border-radius:25px;
+    background:linear-gradient(135deg,#00f7ff08,#ff00aa08);
+    box-shadow:0 0 50px #00f7ff10;
+}
+
+.jackpot small{
+    color:#aaa;
+    letter-spacing:4px;
+}
+
+.money{
+    margin-top:10px;
+    font-size:clamp(55px,10vw,100px);
+    font-weight:1000;
+    color:#ffe600;
+    text-shadow:0 0 15px #ffe600,0 0 50px #ff8c00;
+}
+
+/* BUTTON */
+button{
+    border:0;
+    padding:16px 30px;
+    border-radius:10px;
+    background:linear-gradient(90deg,#00f7ff,#7b2cff);
+    color:white;
+    font-weight:900;
+    letter-spacing:1px;
+    cursor:pointer;
+    box-shadow:0 0 30px #00f7ff44;
+    transition:.2s;
+}
+
+button:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 40px #00f7ff99;
+}
+
+/* GAME */
+.game{
+    display:none;
+    margin:50px 0;
+    padding:35px;
+    border:1px solid #ffffff20;
+    border-radius:25px;
+    background:#ffffff06;
+    backdrop-filter:blur(15px);
+}
+
+.game-top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:25px;
+    color:#00f7ff;
+    font-weight:bold;
+}
+
+.question{
+    font-size:25px;
+    margin-bottom:25px;
+}
+
+.options{
+    display:grid;
+    gap:13px;
+}
+
+.option{
+    width:100%;
+    text-align:left;
+    background:#ffffff08;
+    border:1px solid #ffffff18;
+    color:white;
+}
+
+.option:hover{
+    border-color:#00f7ff;
+}
+
+#result{
+    margin-top:20px;
+    min-height:25px;
+    color:#ffe600;
+    font-weight:bold;
+}
+
+/* WIN */
+.win{
+    display:none;
+    text-align:center;
+    padding:60px 20px;
+}
+
+.win h2{
+    font-size:60px;
+    color:#ffe600;
+    text-shadow:0 0 30px #ffe600;
+}
+
+.win p{
+    color:#bbb;
+    margin:15px 0 30px;
+}
+
+/* CLAIM */
+.claim{
+    display:none;
+    max-width:500px;
+    margin:50px auto;
+    padding:35px;
+    border-radius:20px;
+    border:1px solid #ffffff20;
+    background:#090811;
+    text-align:center;
+}
+
+.claim h2{
+    margin-bottom:10px;
+}
+
+.demo-note{
+    margin:15px 0;
+    padding:12px;
+    border:1px solid #ffe60055;
+    color:#ffe600;
+    font-size:12px;
+    line-height:1.5;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    margin:8px 0;
+    background:#000;
+    border:1px solid #ffffff25;
+    color:white;
+    border-radius:8px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#00f7ff;
+}
+
+.claim button{
+    width:100%;
+    margin-top:12px;
+}
+
+/* REVEAL */
+.reveal{
+    display:none;
+    text-align:center;
+    margin:60px auto;
+    max-width:800px;
+    padding:45px 25px;
+    border:2px solid #ff245d;
+    border-radius:25px;
+    background:#ff245d08;
+    box-shadow:0 0 50px #ff245d20;
+}
+
+.reveal .warning{
+    font-size:70px;
+}
+
+.reveal h2{
+    color:#ff315f;
+    font-size:42px;
+    margin:15px 0;
+}
+
+.reveal p{
+    color:#bbb;
+    line-height:1.8;
+}
+
+.tips{
+    margin-top:30px;
+    display:grid;
+    gap:10px;
+    text-align:left;
+}
+
+.tip{
+    padding:15px;
+    border-left:3px solid #00f7ff;
+    background:#ffffff06;
+}
+
+footer{
+    text-align:center;
+    padding:35px;
+    color:#666;
+    font-size:12px;
+}
+
+@media(max-width:600px){
+    .game{padding:22px}
+    .win h2{font-size:40px}
+    .reveal h2{font-size:30px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="grid"></div>
+
+<header>
+    <div class="logo">⚡ PRIZEHUNTER</div>
+    <div class="live"><i></i> LIVE CHALLENGE</div>
+</header>
+
+<main>
+
+<section class="hero">
+
+    <div class="badge">⚠️ ONE CHANCE • ONE JACKPOT</div>
+
+    <h1>
+        WIN<br>
+        <span>₹10,000</span>
+    </h1>
+
+    <p class="subtitle">
+        Complete the ultimate 3-question challenge and unlock
+        today's mystery jackpot.
+    </p>
+
+    <div class="jackpot">
+        <small>TODAY'S JACKPOT</small>
+        <div class="money">₹10,000</div>
+    </div>
+
+    <button onclick="startGame()">
+        🚀 START CHALLENGE
+    </button>
+
+</section>
+
+
+<section class="game" id="game">
+
+    <div class="game-top">
+        <span id="level">QUESTION 1/3</span>
+        <span>TIME: <b id="timer">20</b>s</span>
+    </div>
+
+    <div class="question" id="question"></div>
+
+    <div class="options" id="options"></div>
+
+    <div id="result"></div>
+
+</section>
+
+
+<section class="win" id="win">
+
+    <div style="font-size:80px">🎉</div>
+
+    <h2>YOU WON!</h2>
+
+    <p>
+        Your jackpot of <b>₹10,000</b> is ready.
+    </p>
+
+    <button onclick="showClaim()">
+        💰 CLAIM ₹10,000
+    </button>
+
+</section>
+
+
+<section class="claim" id="claim">
+
+    <h2>🔐 Verify to Claim Prize</h2>
+
+    <p style="color:#aaa;margin-top:8px">
+        Demo verification screen
+    </p>
+
+    <div class="demo-note">
+        ⚠️ AWARENESS DEMO: Never enter your real password here.
+        Use only the demo values shown below.
+    </div>
+
+    <input
+        id="demoEmail"
+        type="text"
+        placeholder="Demo email (e.g. demo@example.com)"
+    >
+
+    <input
+        id="demoPassword"
+        type="password"
+        placeholder="Demo password"
+    >
+
+    <button onclick="reveal()">
+        CONTINUE
+    </button>
+
+</section>
+
+
+<section class="reveal" id="reveal">
+
+    <div class="warning">🚨</div>
+
+    <h2>PHISHING AWARENESS!</h2>
+
+    <p>
+        You just reached the final stage of a cybersecurity
+        awareness simulation.
+    </p>
+
+    <br>
+
+    <p>
+        No password was saved, transmitted or collected.
+        This page demonstrates how attractive prize offers
+        can lead users toward unsafe login pages.
+    </p>
+
+    <div class="tips">
+
+        <div class="tip">
+            🛡️ <b>Check the URL</b> before entering credentials.
+        </div>
+
+        <div class="tip">
+            🔑 <b>Never reuse passwords</b> on random websites.
+        </div>
+
+        <div class="tip">
+            📱 <b>Use 2FA / passkeys</b> whenever available.
+        </div>
+
+        <div class="tip">
+            🚫 <b>Unexpected prizes are a warning sign.</b>
+        </div>
+
+    </div>
+
+    <br>
+
+    <button onclick="location.reload()">
+        🔄 PLAY AGAIN
+    </button>
+
+</section>
+
+</main>
+
+<footer>
+    CYBERSECURITY AWARENESS PROJECT • 2026
+</footer>
+
+
+<script>
+
+const questions = [
+
+    {
+        q:"Which is the safest password?",
+        options:[
+            "password123",
+            "karan2008",
+            "X7!mQ9#zL2@p",
+            "12345678"
+        ],
+        answer:2
+    },
+
+    {
+        q:"You receive a message saying you won ₹10,000. What should you do first?",
+        options:[
+            "Click the link immediately",
+            "Check the sender and website URL",
+            "Send your password",
+            "Forward it to everyone"
+        ],
+        answer:1
+    },
+
+    {
+        q:"What should you do if a website asks for your password unexpectedly?",
+        options:[
+            "Enter it quickly",
+            "Share it with a friend",
+            "Leave and verify the official website",
+            "Use your most common password"
+        ],
+        answer:2
+    }
+
+];
+
+let current = 0;
+let time = 20;
+let timer;
+let locked = false;
+
+
+function startGame(){
+
+    document.querySelector(".hero").style.display="none";
+
+    document.getElementById("game").style.display="block";
+
+    current=0;
+
+    loadQuestion();
+
+}
+
+
+function loadQuestion(){
+
+    locked=false;
+
+    time=20;
+
+    document.getElementById("timer").textContent=time;
+
+    document.getElementById("level").textContent=
+        "QUESTION "+(current+1)+"/3";
+
+    document.getElementById("question").textContent=
+        questions[current].q;
+
+    const options =
+        document.getElementById("options");
+
+    options.innerHTML="";
+
+    questions[current].options.forEach((option,index)=>{
+
+        const btn=document.createElement("button");
+
+        btn.className="option";
+
+        btn.textContent=
+            String.fromCharCode(65+index)+". "+option;
+
+        btn.onclick=()=>answer(index);
+
+        options.appendChild(btn);
+
+    });
+
+    document.getElementById("result").textContent="";
+
+    clearInterval(timer);
+
+    timer=setInterval(()=>{
+
+        time--;
+
+        document.getElementById("timer").textContent=time;
+
+        if(time<=0){
+
+            clearInterval(timer);
+
+            answer(-1);
+
+        }
+
+    },1000);
+
+}
+
+
+function answer(index){
+
+    if(locked)return;
+
+    locked=true;
+
+    clearInterval(timer);
+
+    const result=document.getElementById("result");
+
+    if(index===questions[current].answer){
+
+        result.textContent="✓ CORRECT!";
+
+    }else{
+
+        result.textContent=
+            "✓ Nice try! Continuing the challenge...";
+
+    }
+
+    setTimeout(()=>{
+
+        current++;
+
+        if(current<questions.length){
+
+            loadQuestion();
+
+        }else{
+
+            finishGame();
+
+        }
+
+    },800);
+
+}
+
+
+function finishGame(){
+
+    document.getElementById("game").style.display="none";
+
+    document.getElementById("win").style.display="block";
+
+    confetti();
+
+}
+
+
+function showClaim(){
+
+    document.getElementById("win").style.display="none";
+
+    document.getElementById("claim").style.display="block";
+
+}
+
+
+function reveal(){
+
+    /*
+       IMPORTANT:
+       Nothing typed here is stored or sent anywhere.
+       This is a cybersecurity awareness simulation.
+    */
+
+    document.getElementById("claim").style.display="none";
+
+    document.getElementById("reveal").style.display="block";
+
+    window.scrollTo({
+        top:document.body.scrollHeight,
+        behavior:"smooth"
+    });
+
+    confetti();
+
+}
+
+
+/* Simple visual confetti */
+
+function confetti(){
+
+    for(let i=0;i<80;i++){
+
+        const piece=document.createElement("div");
+
+        piece.style.position="fixed";
+        piece.style.width="8px";
+        piece.style.height="14px";
+        piece.style.background=
+            ["#00f7ff","#ff2d75","#ffe600","#7b2cff"]
+            [Math.floor(Math.random()*4)];
+
+        piece.style.left=Math.random()*100+"vw";
+        piece.style.top="-20px";
+        piece.style.zIndex="9999";
+        piece.style.transform=
+            "rotate("+Math.random()*360+"deg)";
+
+        document.body.appendChild(piece);
+
+        const fall=
+            piece.animate(
+                [
+                    {transform:"translateY(0) rotate(0deg)"},
+                    {
+                        transform:
+                        "translateY(110vh) rotate(720deg)"
+                    }
+                ],
+                {
+                    duration:1500+Math.random()*2000,
+                    easing:"linear"
+                }
+            );
+
+        fall.onfinish=()=>piece.remove();
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
